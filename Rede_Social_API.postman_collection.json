@@ -692,7 +692,7 @@
 	"variable": [
 		{
 			"key": "BASE_URL",
-			"value": "http://api.dominio.local",
+			"value": "http://localhost",
 			"type": "string"
 		},
 		{

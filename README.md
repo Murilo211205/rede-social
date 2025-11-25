@@ -23,6 +23,50 @@ api/
 │   └── schema.sql       # Script de criação do banco
 └── composer.json
 ```
+
+## Principais endpoints
+
+### Auth
+- `POST /auth/register` — Registrar novo usuário
+- `POST /auth/login` — Fazer login (retorna JWT)
+- `POST /auth/verify` — Verificar token
+
+### Posts
+- `GET /posts` — Listar posts (query: page, sort)
+- `GET /posts/{id}` — Obter post
+- `POST /posts` — Criar post
+- `PUT /posts/{id}` — Atualizar post
+- `DELETE /posts/{id}` — Deletar post
+- `GET /posts/search?q={query}` — Buscar posts
+
+### Comentários
+- `GET /posts/{postId}/comments` — Listar comentários
+- `POST /posts/{postId}/comments` — Criar comentário
+- `DELETE /comments/{id}` — Deletar comentário
+
+### Likes
+- `POST /posts/{postId}/like` — Curtir post
+- `DELETE /posts/{postId}/like` — Descurtir post
+- `POST /comments/{commentId}/like` — Curtir comentário
+- `DELETE /comments/{commentId}/like` — Descurtir comentário
+
+### Usuários
+- `GET /users/{username}` — Perfil do usuário
+- `GET /users/{username}/posts` — Posts de um usuário
+- `PUT /users/profile` — Atualizar perfil
+- `GET /users/search?q={query}` — Buscar usuários
+
+### Follow
+- `POST /users/{userId}/follow` — Seguir usuário
+- `DELETE /users/{userId}/follow` — Deixar de seguir
+- `GET /users/{userId}/followers` — Listar seguidores
+- `GET /users/{userId}/following` — Listar seguindo
+
+### Notificações
+- `GET /notifications` — Listar notificações do usuário autenticado
+- `GET /notifications/unread` — Contar não lidas
+- `PUT /notifications/{id}/read` — Marcar como lida
+
 ---
 
 ## Pré-requisitos
@@ -163,47 +207,49 @@ http://localhost/
 
 ---
 
-## Principais endpoints
+## Usando o Postman com o Desktop Agent para testes
 
-Importe a coleção Postman `Rede_Social_API.postman_collection.json` disponível no repositório para realizar os testes.
+Para testar os endpoints localmente (especialmente `http://localhost`), é necessário utilizar o **Postman Desktop Agent**, pois o Postman Web sozinho não permite enviar requisições para localhost.
 
-### Auth
-- `POST /api/auth/register` — Registrar novo usuário
-- `POST /api/auth/login` — Fazer login (retorna JWT)
-- `POST /api/auth/verify` — Verificar token
+### 1. Instalar o Postman
+Baixe o Postman (versão Desktop) em:  
+👉 **https://www.postman.com/downloads/**
 
-### Posts
-- `GET /api/posts` — Listar posts (query: page, sort)
-- `GET /api/posts/{id}` — Obter post
-- `POST /api/posts` — Criar post
-- `PUT /api/posts/{id}` — Atualizar post
-- `DELETE /api/posts/{id}` — Deletar post
-- `GET /api/posts/search?q={query}` — Buscar posts
+### 2. Instalar o Postman Desktop Agent
+O agente é responsável por enviar requisições para URLs locais.  
+Baixe em:  
+👉 **https://www.postman.com/downloads/postman-agent/**
 
-### Comentários
-- `GET /api/posts/{postId}/comments` — Listar comentários
-- `POST /api/posts/{postId}/comments` — Criar comentário
-- `DELETE /api/comments/{id}` — Deletar comentário
+### 3. Abrir o Desktop Agent
+Após instalar, abra o aplicativo:
 
-### Likes
-- `POST /api/posts/{postId}/like` — Curtir post
-- `DELETE /api/posts/{postId}/like` — Descurtir post
-- `POST /api/comments/{commentId}/like` — Curtir comentário
-- `DELETE /api/comments/{commentId}/like` — Descurtir comentário
+**Windows:** ele aparece próximo ao relógio (ícone laranja do Postman).  
+**macOS:** aparece na barra superior.  
 
-### Usuários
-- `GET /api/users/{username}` — Perfil do usuário
-- `GET /api/users/{username}/posts` — Posts de um usuário
-- `PUT /api/users/profile` — Atualizar perfil
-- `GET /api/users/search?q={query}` — Buscar usuários
+Certifique-se de que está mostrando **“Connected”** no canto inferior do Postman.
 
-### Follow
-- `POST /api/users/{userId}/follow` — Seguir usuário
-- `DELETE /api/users/{userId}/follow` — Deixar de seguir
-- `GET /api/users/{userId}/followers` — Listar seguidores
-- `GET /api/users/{userId}/following` — Listar seguindo
+### 4. Importar a coleção da API
+No Postman:
+1. Clique em **Import**
+2. Selecione o arquivo:
+   ```
+   Rede_Social_API.postman_collection.json
+   ```
+3. A coleção com os endpoints será carregada automaticamente.
 
-### Notificações
-- `GET /api/notifications` — Listar notificações do usuário autenticado
-- `GET /api/notifications/unread` — Contar não lidas
-- `PUT /api/notifications/{id}/read` — Marcar como lida
+### 5. Enviar requisições
+Agora você pode testar normalmente:
+- Registrar: `POST http://localhost/auth/register`
+- Login: `POST http://localhost/auth/login`
+- etc.
+**Ah, e não esqueça de alterar a variável `TOKEN` para realizar requisições com conta autenticada.**  
+Tanto o endpoint **/auth/register** quanto **/auth/login** retornam um token JWT.  
+Copie o valor retornado em `token` e coloque na variável global `TOKEN` do Postman  
+(*Em Postman → Environments → Globals*).
+
+Se aparecer o aviso *“Please install the Postman Desktop Agent”*, basta verificar:
+- Se o agente está aberto
+- Se o Postman está em modo **Desktop**, não Web
+- Se não há bloqueio de firewall
+
+Com isso, tudo deve funcionar sem problemas.
