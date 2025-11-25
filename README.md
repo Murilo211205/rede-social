@@ -26,9 +26,52 @@ api/
 ---
 
 ## Pré-requisitos
-- XAMPP (Apache + MySQL) instalado  
+- XAMPP (Apache + MySQL) 8.2.12 instalado  
 - PHP 8.0+ (já incluído no XAMPP)  
 - Composer
+
+---
+
+## Instalação do XAMPP
+
+1. Baixe o instalador oficial do XAMPP 8.2.12:  
+   👉 **[https://www.apachefriends.org/pt_br/download.html](https://www.apachefriends.org/pt_br/download.html)**
+
+2. Execute o instalador e deixe as opções padrão (Apache, MySQL e PHP ativados).
+
+3. Após a instalação, abra o **XAMPP Control Panel**.
+
+4. Inicie os serviços:
+   - **Apache**
+   - **MySQL**
+
+5. Verifique no navegador:  
+   ```
+   http://localhost
+   ```
+   Se abrir a página inicial do XAMPP, está funcionando.
+
+---
+
+## Instalação do Composer
+
+1. Baixe o instalador oficial do Composer:  
+   👉 **[https://getcomposer.org/download/](https://getcomposer.org/download/)**
+
+2. No Windows:
+   - Execute o arquivo **Composer-Setup.exe**
+   - Deixe as opções padrão
+   - O instalador detecta automaticamente o PHP do XAMPP
+   - Finalize a instalação
+
+3. No macOS ou Linux:
+   Execute no terminal conforme instruções do site oficial.
+
+4. Após instalar, verifique:
+   ```bash
+   composer -V
+   ```
+   Deve exibir a versão instalada.
 
 ---
 
