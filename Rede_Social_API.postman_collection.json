@@ -1,0 +1,704 @@
+{
+	"info": {
+		"_postman_id": "rede-social-api-2024",
+		"name": "Rede Social API - Projeto POO",
+		"description": "Collection completa da API REST da Rede Social",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "🔐 Autenticação",
+			"item": [
+				{
+					"name": "Registrar Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"murilo\",\n  \"email\": \"murilo@example.com\",\n  \"password\": \"senha123\",\n  \"bio\": \"Desenvolvedor PHP\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/register",
+							"host": ["{{BASE_URL}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data.token) {",
+									"    pm.environment.set(\"TOKEN\", jsonData.data.token);",
+									"    console.log(\"Token salvo:\", jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"murilo@example.com\",\n  \"password\": \"senha123\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": ["{{BASE_URL}}"],
+							"path": ["auth", "login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/auth/verify",
+							"host": ["{{BASE_URL}}"],
+							"path": ["auth", "verify"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "👤 Usuários",
+			"item": [
+				{
+					"name": "Ver Perfil",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/murilo",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "murilo"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Posts do Usuário",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/murilo/posts?page=1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "murilo", "posts"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Perfil",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"bio\": \"Desenvolvedor Full Stack PHP e JavaScript\",\n  \"avatar_url\": \"https://i.pravatar.cc/150?img=1\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/users/profile",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "profile"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Usuários",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/search?q=murilo",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "search"],
+							"query": [
+								{
+									"key": "q",
+									"value": "murilo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Usuário (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/users/2",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "2"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Banir Usuário (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/users/2/ban",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "2", "ban"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "📝 Posts",
+			"item": [
+				{
+					"name": "Listar Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/posts?page=1&sort=recent",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "sort",
+									"value": "recent",
+									"description": "recent ou popular"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Meu Primeiro Post na Rede Social\",\n  \"content\": \"Este é o conteúdo do meu primeiro post. Estou testando a API!\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/posts",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Post Específico",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/posts/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar Post",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Título Atualizado do Post\",\n  \"content\": \"Conteúdo atualizado com mais informações.\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/posts/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Post",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/posts/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/posts/search?q=PHP",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts", "search"],
+							"query": [
+								{
+									"key": "q",
+									"value": "PHP"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "💬 Comentários",
+			"item": [
+				{
+					"name": "Listar Comentários do Post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/posts/1/comments?sort=recent",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts", "1", "comments"],
+							"query": [
+								{
+									"key": "sort",
+									"value": "recent",
+									"description": "recent, oldest, popular"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Comentário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"Ótimo post! Muito interessante.\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/posts/1/comments",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts", "1", "comments"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Resposta a Comentário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"Concordo! Muito bom mesmo.\",\n  \"parent_comment_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/posts/1/comments",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts", "1", "comments"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Comentário",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/comments/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["comments", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Comentário",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/comments/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["comments", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "❤️ Likes",
+			"item": [
+				{
+					"name": "Curtir Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/posts/1/like",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts", "1", "like"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Descurtir Post",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/posts/1/like",
+							"host": ["{{BASE_URL}}"],
+							"path": ["posts", "1", "like"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Curtir Comentário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/comments/1/like",
+							"host": ["{{BASE_URL}}"],
+							"path": ["comments", "1", "like"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Descurtir Comentário",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/comments/1/like",
+							"host": ["{{BASE_URL}}"],
+							"path": ["comments", "1", "like"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "👥 Follows",
+			"item": [
+				{
+					"name": "Seguir Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/users/2/follow",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "2", "follow"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deixar de Seguir",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/users/2/follow",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "2", "follow"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Seguidores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/1/followers",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "1", "followers"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Seguindo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/1/following",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "1", "following"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar se Está Seguindo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/users/2/is-following",
+							"host": ["{{BASE_URL}}"],
+							"path": ["users", "2", "is-following"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🔔 Notificações",
+			"item": [
+				{
+					"name": "Listar Notificações",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/notifications",
+							"host": ["{{BASE_URL}}"],
+							"path": ["notifications"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contar Não Lidas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/notifications/unread",
+							"host": ["{{BASE_URL}}"],
+							"path": ["notifications", "unread"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Marcar Como Lida",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/notifications/1/read",
+							"host": ["{{BASE_URL}}"],
+							"path": ["notifications", "1", "read"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Marcar Todas Como Lidas",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/notifications/read-all",
+							"host": ["{{BASE_URL}}"],
+							"path": ["notifications", "read-all"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://api.dominio.local",
+			"type": "string"
+		},
+		{
+			"key": "TOKEN",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
