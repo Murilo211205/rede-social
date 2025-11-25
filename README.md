@@ -76,6 +76,29 @@ api/
 
 ---
 
+## Baixar o projeto
+
+Antes de começar a instalação, baixe este repositório:
+
+### **Opção 1 — Download ZIP**
+1. No GitHub, clique no botão **Code** (canto superior direito).
+2. Selecione **Download ZIP**.
+3. Extraia o arquivo baixado.
+4. Acesse a pasta:
+   ```
+   rede-social/api
+   ```
+
+### **Opção 2 — Clonar via Git**
+Se preferir usar o Git:
+```bash
+git clone https://github.com/Murilo211205/rede-social.git
+```
+
+Depois disso, siga para a etapa de instalação do XAMPP.
+
+---
+
 ## Instalação do XAMPP
 
 1. Baixe o instalador oficial do XAMPP 8.2.12:  
