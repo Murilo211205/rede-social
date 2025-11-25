@@ -242,6 +242,7 @@ Agora você pode testar normalmente:
 - Registrar: `POST http://localhost/auth/register`
 - Login: `POST http://localhost/auth/login`
 - etc.
+
 **Ah, e não esqueça de alterar a variável `TOKEN` para realizar requisições com conta autenticada.**  
 Tanto o endpoint **/auth/register** quanto **/auth/login** retornam um token JWT.  
 Copie o valor retornado em `token` e coloque na variável global `TOKEN` do Postman  
