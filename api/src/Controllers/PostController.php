@@ -21,7 +21,7 @@ class PostController extends Controller
 
     /**
      * GET /api/posts
-     * Lista posts com paginaÃ§Ã£o e filtro
+     * Lista posts com paginação e filtro
      */
     public function list(): void
     {
@@ -48,14 +48,14 @@ class PostController extends Controller
 
     /**
      * GET /api/posts/{id}
-     * ObtÃ©m um post especÃ­fico
+     * Obtém um post específico
      */
     public function show(): void
     {
         $id = (int)($this->getParam('id') ?? 0);
 
         if ($id <= 0) {
-            $this->error('ID invÃ¡lido', 'INVALID_ID', 400);
+            $this->error('ID inválido', 'INVALID_ID', 400);
         }
 
         $post = $this->postModel->get($id);
@@ -64,7 +64,7 @@ class PostController extends Controller
             $this->notFound('Post');
         }
 
-        // Busca usuÃ¡rio e remove dados sensÃ­veis
+        // Busca usuário e remove dados sensíveis
         $user = $this->userModel->get($post['user_id']);
         $post['author'] = $this->sanitizeUser($user);
 
@@ -89,7 +89,7 @@ class PostController extends Controller
 
         $data = $this->getJsonBody();
 
-        // ValidaÃ§Ã£o
+        // Validação
         $validator = new Validator();
         $validator
             ->required($data['title'] ?? '', 'title')
@@ -102,7 +102,7 @@ class PostController extends Controller
 
         // Gera slug base
         // O banco garante unicidade via UNIQUE constraint
-        // Se houver duplicata, ajustamos adicionando sufixo numÃ©rico
+        // Se houver duplicata, ajustamos adicionando sufixo numérico
         $slug = StringUtils::slugify($data['title']);
         $finalSlug = $slug;
         $attempt = 1;
@@ -120,15 +120,16 @@ class PostController extends Controller
                     $this->error('Erro ao criar post', 'CREATION_ERROR', 500);
                 }
 
-                // Sucesso! Slug Ãºnico foi inserido
+                // Sucesso! Slug único foi inserido
                 break;
             } catch (\Exception $e) {
                 // Se for erro de slug duplicado, tenta com sufixo numérico
                 if (strpos($e->getMessage(), 'Duplicate entry') !== false && 
                     (strpos($e->getMessage(), 'posts.slug') !== false || strpos($e->getMessage(), "for key 'slug'") !== false)) {
+                    
                     $finalSlug = $slug . '-' . $attempt;
                     $attempt++;
-                    
+
                     // Limite de tentativas para evitar loop infinito
                     if ($attempt > 100) {
                         $this->error('Não foi possível gerar slug único', 'SLUG_ERROR', 500);
@@ -186,7 +187,6 @@ class PostController extends Controller
             $this->error($validator->getFirstError(), 'VALIDATION_ERROR', 400);
         }
 
-        // Usa a assinatura correta do método abstrato update(int $id, array $data)
         try {
             $this->postModel->update($id, [
                 'title' => $data['title'],
@@ -195,6 +195,7 @@ class PostController extends Controller
         } catch (\Exception $e) {
             $this->error('Erro ao atualizar post', 'DATABASE_ERROR', 500);
         }
+
         $updated = $this->postModel->get($id);
 
         $this->success($updated, 'Post atualizado com sucesso');
@@ -246,7 +247,7 @@ class PostController extends Controller
         $query = $this->getParam('q') ?? '';
 
         if (strlen($query) < 2) {
-            $this->error('Query deve ter no mÃ­nimo 2 caracteres', 'INVALID_QUERY', 400);
+            $this->error('Query deve ter no mínimo 2 caracteres', 'INVALID_QUERY', 400);
         }
 
         $posts = $this->postModel->search($query, 20);
