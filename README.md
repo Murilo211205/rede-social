@@ -13,7 +13,7 @@ API REST em PHP (POO) para uma rede social simples. Recursos principais: autenti
 api/
 ├── public/
 │   ├── index.php        # Router principal (entrada da API)
-│   └── uploads/         # Possibilidade de implementar conteúdo enviado pelo usuário (imagens em posts, foto de perfil, etc)
+│   ├── .htaccess        # Todas as requisições vão para index.php para roteamento
 ├── src/
 │   ├── Controllers/     # Regras de negócio e endpoints
 │   ├── Models/          # Acesso ao banco (CRUD)
